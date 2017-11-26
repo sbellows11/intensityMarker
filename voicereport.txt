@@ -1,0 +1,8 @@
+#Voice Report#
+selectObject: 148
+plusObject: 149
+plusObject: 151
+voiceReport$ = Voice report: 0, 0, 75, 500, 1.3, 1.6, 0.03, 0.45
+jitter = extractNumber (voiceReport$, "Jitter (local): ")
+htn = extractNumber (voiceReport$, "Mean harmonics-to-noise ratio: ")
+writeInfoLine: "Jitter = ", percent$ (jitter, 3), ", Mean harmonics to noise ratio= ", htn,"dB"

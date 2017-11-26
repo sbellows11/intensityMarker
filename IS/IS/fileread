@@ -1,0 +1,8 @@
+#directory$ = "/...."
+strings = Create Strings as a file list: "list", "/*.wav"
+numberOfFiles = Get number of strings
+for ifile to numberOfFiles
+	selectObject: strings
+	fileName$ = Get string: ifile
+	Read from file: filename$
+endfor

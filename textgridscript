@@ -1,0 +1,11 @@
+#test testgrid
+#selectObject: 1
+#To TextGrid: "Vowel Consonant", "none"
+#selectObject: 9
+#Rename: "TEST"
+#Add interval on tier 1: 0, 1.3
+time = 0.3
+selectObject: 1
+
+Insert boundary: 1, time
+

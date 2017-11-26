@@ -1,0 +1,112 @@
+form Open Files
+	sentence Directory:
+	real Tolerance:
+endform
+writeInfoLine: directory$
+
+#directory$ = "IS/IS"
+strings = Create Strings as file list: "list", directory$ + "/*.wav"
+numberOfFiles = Get number of strings
+for ifile to numberOfFiles
+    selectObject: strings
+    fileName$ = Get string: ifile
+    Read from file: directory$ + "/" + fileName$
+	name$ = fileName$
+	index_p = index(name$,".")
+	name$ = left$(name$,index_p-1)
+
+    selectObject: "Sound " + name$
+    To Intensity: 75, 0.001
+    Rename: name$
+    selectObject: "Sound " + name$
+    To TextGrid: "Consonant Vowel", "none"
+    Rename: name$
+
+
+
+#Get start and end times
+tmin = Get start time
+tmax = Get end time
+
+#step size
+dt = 0.001
+
+#track time position
+cursor = tmin
+
+currentT = tmin
+
+selectObject: "Intensity " + name$
+currentI = 0
+
+maxT = 0
+maxI = 0
+minT = 0
+minI = 0
+
+#tolerance = 0.95
+
+findMax = 1
+
+
+while currentT < tmax
+    
+
+   
+    if findMax = 1
+        if currentI > maxI 
+            maxI = currentI
+            maxT = currentT
+        endif
+        if currentI < maxI
+            if currentI < (tolerance*maxI)
+
+		selectObject: "TextGrid " + name$
+		Insert boundary: 1, maxT
+		
+		minT = currentT	
+                minI = currentI
+	
+
+                findMax = 0
+
+            endif
+        endif
+
+        currentT = currentT + dt
+        selectObject: "Intensity " + name$
+	currentI = Get value at time: currentT, "Cubic"
+    endif
+    
+    
+    if findMax = 0
+	
+        if currentI < minI
+            minT = currentT;
+            minI = currentI;
+        endif
+        if currentI > minI
+            if currentI > (minI/tolerance)
+
+		selectObject: "TextGrid " + name$
+		Insert boundary: 2, minT
+
+		maxI = currentI
+		maxT = currentT
+
+
+                findMax = 1
+            endif
+        endif
+        selectObject: "Intensity " + name$
+	currentI = Get value at time: currentT, "Cubic"
+	currentT = currentT + dt
+
+    endif
+           
+
+endwhile
+
+    
+endfor
+
